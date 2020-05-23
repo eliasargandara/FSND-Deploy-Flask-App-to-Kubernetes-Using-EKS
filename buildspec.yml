@@ -18,12 +18,8 @@ phases:
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' simple_jwt_api.yml
         - $(aws ecr get-login --no-include-email)
         - export KUBECONFIG=$HOME/.kube/config
-        - pip install --upgrade pip
-        - pip install -U virtualenv
-        - virtualenv venv --python python3
-        - . venv/bin/activate
-        - pip install -r requirements.txt
-        - pytest
+        - pip install --upgrade pip && pip install -U virtualenv
+        - virtualenv venv --python python3 && . venv/bin/activate && pip install -r requirements.txt && pytest && deactivate
   build:
     commands:
       - docker build --tag $REPOSITORY_URI:$TAG .
